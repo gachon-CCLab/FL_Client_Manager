@@ -81,7 +81,7 @@ def read_root():
 @app.get("/trainFin")
 def fin_train():
     global manager
-    print('fin')
+    logging.info('fin')
     # manager.infer_ready = True
     manager.FL_learning = False
     manager.FL_ready = False
@@ -97,7 +97,7 @@ def fin_train():
 @app.get("/trainFail")
 def fail_train():
     global manager
-    print('Fail')
+    logging.info('Fail')
     #manager.infer_ready = False
     manager.FL_learning = False
     manager.FL_ready = False
