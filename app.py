@@ -4,13 +4,9 @@ import requests
 import uvicorn
 from fastapi import FastAPI
 import asyncio
-import wget
-from functools import partial
-from datetime import datetime, timedelta 
-
-from functools import wraps
-
-import requests, sys
+import json
+from datetime import datetime
+import requests
 
 logging.basicConfig(level=logging.DEBUG, format="%(asctime)s [%(levelname)8.8s] %(message)s",
                     handlers=[logging.StreamHandler()])
@@ -56,7 +52,7 @@ manager = manager_status()
 def startup():
     ##### S0 #####
     
-    get_server_info()
+    # get_server_info()
 
     # create_task를 해야 여러 코루틴을 동시에 실행
     # asyncio.create_task(pull_model())
@@ -145,9 +141,9 @@ def async_dec(awaitable_func):
 @async_dec
 async def health_check():
     global manager
-    logging.info(f'초기 health_check() FL_learning: {manager.FL_learning}')
-    logging.info(f'초기 health_check() FL_client_online: {manager.FL_client_online}')
-    logging.info(f'초기 health_check() FL_ready: {manager.FL_ready}')
+    health_check_result = {"FL_learning": manager.FL_learning, "FL_client_online": manager.FL_client_online, "FL_ready": manager.FL_ready}
+    json_result = json.dumps(health_check_result)
+    print(f'health_check - {json_result}')
     
     # FL Server Status가 False면 당연히 FL_learning도 False
     if manager.FL_ready == False:
@@ -206,19 +202,19 @@ async def check_flclient_online():
 @async_dec
 async def start_training():
     global manager
-    logging.info(f'start_training - FL Client Learning: {manager.FL_learning}')
-    logging.info(f'start_training - FL Client Online: {manager.FL_client_online}')
-    logging.info(f'start_training - FL Server Status: {manager.FL_ready}')
+    # logging.info(f'start_training - FL Client Learning: {manager.FL_learning}')
+    # logging.info(f'start_training - FL Client Online: {manager.FL_client_online}')
+    # logging.info(f'start_training - FL Server Status: {manager.FL_ready}')
 
     if (manager.FL_client_online == True) and (manager.FL_learning == False) and (manager.FL_ready == True):
         logging.info('start training')
         loop = asyncio.get_event_loop()
         res = await loop.run_in_executor(None, requests.get, ('http://' + manager.FL_client + '/start/'+manager.FL_server))
+        manager.FL_learning = True
         logging.info(f'client_start code: {res.status_code}')
         if (res.status_code == 200) and (res.json()['FL_client_start']):
             logging.info('flclient learning')
-            manager.FL_learning = True
-
+            
         elif (res.status_code != 200):
             manager.FL_client_online = False
             logging.info('flclient offline')
