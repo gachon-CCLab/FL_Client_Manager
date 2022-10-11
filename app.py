@@ -24,8 +24,8 @@ class manager_status(BaseModel):
 
     # INFER_SE: str = '0.0.0.0:8001'
     FL_client: str = '127.0.0.1:8002'
-    FL_server_ST: str = '10.152.183.135:8000'
-    FL_server: str = '10.152.183.131:8080'  # '0.0.0.1:8080'
+    FL_server_ST: str = '10.152.183.155:8000'
+    FL_server: str = '10.152.183.110:8080'  # '0.0.0.1:8080'
     # S3_filename: str = '../download_model/%s_model.h5'%today_str  # 다운로드된 모델이 저장될 위치#######################
     S3_bucket: str = 'fl-gl-model'
     S3_key: str = ''  # 모델 가중치 파일 이름
@@ -35,7 +35,7 @@ class manager_status(BaseModel):
     FL_ready: bool = False  # FL server준비됨
     have_server_ip: bool = True  # server 주소가 확보되어있음
 
-    FL_client_online: bool = False  # flower client online?
+    FL_client_online: bool = False  # flower client online
     FL_learning: bool = False  # flower client 학습중
     FL_learning_complete: bool = False # flower client 학습 준비 상태
 
