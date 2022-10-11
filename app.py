@@ -143,7 +143,7 @@ def async_dec(awaitable_func):
 async def health_check():
     global manager
 
-    health_check_result = {"FL_learning": manager.FL_learning, "FL_client_online": manager.FL_client_online, "FL_ready": manager.FL_ready}
+    health_check_result = {"client_num": manager.FL_client_num, "FL_learning": manager.FL_learning, "FL_client_online": manager.FL_client_online, "FL_ready": manager.FL_ready}
     json_result = json.dumps(health_check_result)
     logging.info(f'health_check - {json_result}')
 
