@@ -145,7 +145,7 @@ async def health_check():
 
     health_check_result = {"FL_learning": manager.FL_learning, "FL_client_online": manager.FL_client_online, "FL_ready": manager.FL_ready}
     json_result = json.dumps(health_check_result)
-    print(f'health_check - {json_result}')
+    logging.info(f'health_check - {json_result}')
 
     # print('FL_learning: ', manager.FL_learning)
     # print('FL_client_online: ', manager.FL_client_online)
