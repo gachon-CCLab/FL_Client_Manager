@@ -23,7 +23,7 @@ class manager_status(BaseModel):
     global today_str
 
     # INFER_SE: str = '0.0.0.0:8001'
-    FL_client: str = '127.0.0.1:8002'
+    FL_client: str = '0.0.0.0:8002'
     FL_server_ST: str = '10.152.183.155:8000'
     FL_server: str = '10.152.183.110:8080'  # '0.0.0.1:8080'
     # S3_filename: str = '../download_model/%s_model.h5'%today_str  # 다운로드된 모델이 저장될 위치#######################
@@ -175,7 +175,7 @@ async def health_check():
             pass
     else:
         pass
-    await asyncio.sleep(15)
+    await asyncio.sleep(8)
     return manager
 
 @async_dec
@@ -196,7 +196,7 @@ async def check_flclient_online():
     else:
         pass
     
-    await asyncio.sleep(6)
+    await asyncio.sleep(12)
     return manager
 
 @async_dec
