@@ -138,25 +138,18 @@ def async_dec(awaitable_func):
     return keeping_state
 
 
+# Server_Status의 상태 확인
 @async_dec
 async def health_check():
     global manager
+
     health_check_result = {"FL_learning": manager.FL_learning, "FL_client_online": manager.FL_client_online, "FL_ready": manager.FL_ready}
     json_result = json.dumps(health_check_result)
     print(f'health_check - {json_result}')
-    
-    # FL Server Status가 False면 당연히 FL_learning도 False
-    if manager.FL_ready == False:
-        logging.info(f'health_check() FL_ready = False 상태')
-        manager.FL_learning = False
 
-    # FL 실행 오류 방지를 위함
-    # if (manager.FL_client_online == True) and (manager.FL_learning == True) and (manager.FL_ready == True):
-    #     await asyncio.sleep(20)
-    #     logging.info('20초 동안 모든 상태 True인 경우 learning=False 변경')
-    #     manager.FL_learning = False
-    #     await start_training() 
-
+    # print('FL_learning: ', manager.FL_learning)
+    # print('FL_client_online: ', manager.FL_client_online)
+    # print('FL_ready: ', manager.FL_ready)
     if (manager.FL_learning == False) and (manager.FL_client_online == True):
         loop = asyncio.get_event_loop()
         # raise
@@ -164,18 +157,16 @@ async def health_check():
         if (res.status_code == 200) and (res.json()['Server_Status']['FLSeReady']):
             manager.FL_ready = res.json()['Server_Status']['FLSeReady']
             manager.GL_Model_V = res.json()['Server_Status']['GL_Model_V']
-            logging.info(f'server 상태 get 후 server_status: {manager.FL_ready}')
-            # logging.info('flclient learning')
-            # manager.FL_learning = True
+
         elif (res.status_code != 200):
-            manager.FL_client_online = False
+            # manager.FL_client_online = False
             logging.error('FL_server_ST offline')
             # exit(0)
         else:
             pass
     else:
         pass
-    await asyncio.sleep(8)
+    await asyncio.sleep(10)
     return manager
 
 @async_dec
