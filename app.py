@@ -126,13 +126,13 @@ def async_dec(awaitable_func):
     async def keeping_state():
         while True:
             try:
-                logging.debug(str(awaitable_func.__name__) + '함수 시작')
+                # logging.debug(str(awaitable_func.__name__) + '함수 시작')
                 # print(awaitable_func.__name__, '함수 시작')
                 await awaitable_func()
-                logging.debug(str(awaitable_func.__name__) + '_함수 종료')
+                # logging.debug(str(awaitable_func.__name__) + '_함수 종료')
             except Exception as e:
                 # logging.info('[E]' , awaitable_func.__name__, e)
-                logging.error('[E]' + str(awaitable_func.__name__) + str(e))
+                logging.error('[E]' + str(awaitable_func.__name__)+ ': ' + str(e))
             await asyncio.sleep(1)
 
     return keeping_state
