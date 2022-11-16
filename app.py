@@ -72,6 +72,12 @@ def startup():
     # loop.run_until_complete(asyncio.gather(health_check(), check_flclient_online(), start_training()))
 
 
+# fl server error 발생하여 Pod 종료됐을 경우
+def fl_server_closed():
+    global manager
+
+    inform_SE: str = f'{manager.FL_server_ST}/FLSe/'
+    requests.put(inform_SE+'FLSeClosed', verify=False, data=False)
 
 @app.get("/")
 def read_root():
@@ -85,6 +91,7 @@ def fin_train():
     # manager.infer_ready = True
     manager.FL_learning = False
     manager.FL_ready = False
+    fl_server_closed()
     # manager.GL_Model_V += 1
     return manager
 
@@ -101,7 +108,8 @@ def fail_train():
     #manager.infer_ready = False
     manager.FL_learning = False
     manager.FL_ready = False
-    asyncio.run(health_check()) 
+    fl_server_closed()
+    # asyncio.run(health_check()) 
     return manager
 
 
@@ -147,9 +155,10 @@ async def health_check():
     json_result = json.dumps(health_check_result)
     logging.info(f'health_check - {json_result}')
 
-    # print('FL_learning: ', manager.FL_learning)
-    # print('FL_client_online: ', manager.FL_client_online)
-    # print('FL_ready: ', manager.FL_ready)
+    # Server가 Off면 Client Local Learning = False
+    if manager.FL_ready == False:
+        manager.FL_learning == False
+
     if (manager.FL_learning == False) and (manager.FL_client_online == True):
         loop = asyncio.get_event_loop()
         # raise
