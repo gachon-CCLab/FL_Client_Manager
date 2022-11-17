@@ -77,7 +77,11 @@ def fl_server_closed():
     global manager
 
     inform_SE: str = f'{manager.FL_server_ST}/FLSe/'
-    requests.put(inform_SE+'FLSeClosed', verify=False, data=False)
+    try: 
+        requests.put(inform_SE+'FLSeClosed', params={'FLSeReady': 'false'})
+        logging.info('server status FLSeReady => False')
+    except Exception as e:
+        logging.error(f'fl_server_closed error: {e}')
 
 @app.get("/")
 def read_root():
