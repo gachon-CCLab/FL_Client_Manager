@@ -187,7 +187,8 @@ async def check_flclient_online():
         if (res.status_code == 200) and (res.json()['FL_client_online']):
             manager.FL_client_online = res.json()['FL_client_online']
             manager.FL_learning = res.json()['FL_client_start']
-            manager.FL_client_num = res.json()['FL_client']
+            manager.FL_client_num = res.json()['FL_client_num']
+            print('FL_client_online: ', manager.FL_client_online, ' FL_client_num: ',manager.FL_client_num)
             logging.info('FL_client online')
 
         else:
