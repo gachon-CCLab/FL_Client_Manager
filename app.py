@@ -76,7 +76,7 @@ def startup():
 def fl_server_closed():
     global manager
 
-    inform_SE: str = f'{manager.FL_server_ST}/FLSe/'
+    inform_SE: str = f'http://{manager.FL_server_ST}/FLSe/'
     try: 
         requests.put(inform_SE+'FLSeClosed', params={'FLSeReady': 'false'})
         logging.info('server status FLSeReady => False')
