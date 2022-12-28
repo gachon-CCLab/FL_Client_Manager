@@ -212,19 +212,22 @@ async def start_training():
     # logging.info(f'start_training - FL Server Status: {manager.FL_ready}')
 
     if (manager.FL_client_online == True) and (manager.FL_learning == False) and (manager.FL_ready == True):
-        logging.info('start training')
-        loop = asyncio.get_event_loop()
-        res = await loop.run_in_executor(None, requests.get, ('http://' + manager.FL_client + '/start/'+manager.FL_server))
-        manager.FL_learning = True
-        logging.info(f'client_start code: {res.status_code}')
-        if (res.status_code == 200) and (res.json()['FL_client_start']):
-            logging.info('flclient learning')
-            
-        elif (res.status_code != 200):
-            manager.FL_client_online = False
-            logging.info('flclient offline')
-        else:
-            pass
+        try: 
+            logging.info('start training')
+            loop = asyncio.get_event_loop()
+            res = await loop.run_in_executor(None, requests.get, ('http://' + manager.FL_client + '/start/'+manager.FL_server))
+            manager.FL_learning = True
+            logging.info(f'client_start code: {res.status_code}')
+            if (res.status_code == 200) and (res.json()['FL_client_start']):
+                logging.info('flclient learning')
+                
+            elif (res.status_code != 200):
+                manager.FL_client_online = False
+                logging.info('flclient offline')
+            else:
+                pass
+        except Exception as e:
+            logging.error(f'start_training() error: {e}')
     else:
         # await asyncio.sleep(11)
         pass
