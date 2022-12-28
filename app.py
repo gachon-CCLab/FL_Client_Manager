@@ -145,7 +145,7 @@ def async_dec(awaitable_func):
             except Exception as e:
                 # logging.info('[E]' , awaitable_func.__name__, e)
                 logging.error('[E]' + str(awaitable_func.__name__)+ ': ' + str(e))
-            await asyncio.sleep(1)
+            # await asyncio.sleep(1)
 
     return keeping_state
 
@@ -179,7 +179,7 @@ async def health_check():
             pass
     else:
         pass
-    await asyncio.sleep(10)
+    await asyncio.sleep(13)
     return manager
 
 @async_dec
