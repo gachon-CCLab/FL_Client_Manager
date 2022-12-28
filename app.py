@@ -192,7 +192,7 @@ async def check_flclient_online():
             manager.FL_client_online = res.json()['FL_client_online']
             manager.FL_learning = res.json()['FL_client_start']
             manager.FL_client_num = res.json()['FL_client_num']
-            print('FL_client_online: ', manager.FL_client_online, ' FL_client_num: ',manager.FL_client_num)
+            # print('FL_client_online: ', manager.FL_client_online, ' FL_client_num: ',manager.FL_client_num)
             logging.info('FL_client online')
 
         else:
@@ -229,7 +229,7 @@ async def start_training():
         # await asyncio.sleep(11)
         pass
 
-    await asyncio.sleep(13)
+    await asyncio.sleep(8)
     return manager
 
 
